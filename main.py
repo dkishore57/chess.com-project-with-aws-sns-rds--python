@@ -12,6 +12,10 @@ MONTHS=["January","February","March","April","May","June","July","August","Septe
 AWS_REGION = "AWS REGION"  
 SNS_TOPIC_ARN = "SNS TOPIC ARN"
 OUTPUT=[]
+DB_HOST=""
+DB_NAME=""         
+DB_USER=""          
+DB_PASS=""  
 sns_client = boto3.client('sns', region_name=AWS_REGION)
 
 
@@ -76,7 +80,35 @@ class My_chess_apllication():
                 subscription_arn = subscription['SubscriptionArn']
                 sns_client.unsubscribe(SubscriptionArn=subscription_arn)
                 print(f"Unsubscribed {email} successfully.")
-                
+            
+    def connect_to_db(self):
+        try:
+            connection=mysql.connector.connect(
+                host=DB_HOST,
+                database=DB_NAME,
+                user=DB_USER,
+                password=DB_PASS
+            )
+            if connection.is_connected():
+                return connection
+        except Error as e:
+            print(f"Failed to connect to the database: {e}")
+            return None
+
+    def insert_user(self,chess_username, email):
+        connection=self.connect_to_db()
+        if connection:
+            try:
+                cursor=connection.cursor()
+                insert_query="""INSERT INTO chess_users (chess_username, email) VALUES (%s, %s);"""
+                cursor.execute(insert_query, (chess_username, email))
+                connection.commit()
+                print("Data inserted successfully.")
+            except Error as e:
+                print(f"Error while inserting data: {e}")
+            finally:
+                cursor.close()
+                connection.close() 
 
 user_name=input("ENTER YOUR CHESS.COM USERNAME CORRECTLY: ")
 user_mail=input("ENTER THE EMAIL TO RECEIVE GAME LINKS: ")
