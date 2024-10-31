@@ -9,8 +9,8 @@ HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.81 Safari/537.36'
 }
 MONTHS=["January","February","March","April","May","June","July","August","September","October","November","December"]
-AWS_REGION = "ap-southeast-2"  
-SNS_TOPIC_ARN = "arn:aws:sns:ap-southeast-2:345594567556:E-mail-for-game-links"
+AWS_REGION = "AWS REGION"  
+SNS_TOPIC_ARN = "SNS TOPIC ARN"
 OUTPUT=[]
 sns_client = boto3.client('sns', region_name=AWS_REGION)
 
